@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<br />
+<div>@ViewBag.TestData</div>
+<br />
+<div class="panel panel-default" id="AppList">
+    <div class="panel-body"><button v-on:click="gotoAdd(uid,$event)">添加</button></div>
+    <div style="overflow-x:auto;">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr style="background-color:#f6f4f0;">
+                    <th><input type="checkbox" @*v-model="item.state" v-on:click="alocked(item)"*@ /></th>
+                    <th v-for="col in columns">{{col}}</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-show="!isEmpty" v-for="item in rows">
+                    <td style="max-width:4em;"><input type="checkbox" :data-fff="item" @*v-model="item.state" v-on:click="alocked(item)"*@ /></td>
+                    <td style="min-width:6em;">{{item.Name}}</td>
+                    <td style="min-width:6em;">{{item.Description}}</td>
+                    <td style="max-width:6em;">{{item.Status}}</td>
+                    <td style="max-width:6em;">
+                        <a :href="'javascript:void(0);'" v-on:click="gotoDetail(item,$event)">查看详情</a>
+                    </td>
+                </tr>
+                <tr v-show="isEmpty" class="">
+                    <td style="text-align:center;" v-bind:colspan="columns.length">没有匹配的记录</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <ul class="pagination" style="margin:0 0;">
+            <li><a href="#">&laquo;</a></li>
+            <li v-for="index in pageModel.pageSize"><a href="#">{{index}}</a></li>
+            <li><a href="#">&raquo;</a></li>
+        </ul>
+    </div>
+</div>
+@section scripts{
+    <script>
+
+        var AppList = new Vue({
+            el: '#AppList',
+            data: {
+                uid: '@ViewBag.UserId',
+                columns: ['名称', '说明', '状态'],
+                allArticle: "",
+                rows: [],
+                pageModel: {
+                    url: '/App/GetAppList',
+                    pageSize: 10,
+                    menu: [5, 10, 20, 50, 100, 200]
+                }
+            },
+            computed: {
+                isEmpty: function () {
+                    if (this.rows) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+            },
+            methods: {
+                gotoAdd: function (d, e) {
+                    window.location.href = "/App/Add?userId=" + d;
+                    //window.location.replace("/App/Details?appId=" + d.AppId);
+                },
+                gotoDetail: function (d, e) {
+                    window.location.href = "/App/Details?appId=" + d.UserName;
+                    //window.location.replace("/App/Details?appId=" + d.AppId);
+                }
+            },
+            events: {
+                refresh: function (e) {
+                    this.rows = e;
+                }
+            }
+        });
+
+        $(function () {
+            $.ajax({
+                url: AppList.$data.pageModel.url,
+                data: {},
+                type: 'POST',
+                dataType: 'json',
+                success: function (result) {
+                    AppList.$data.rows = result;
+                    //alert(JSON.stringify(result));
+                },
+                error: function (err) {
+                }
+            });
+        });
+    </script>
+}

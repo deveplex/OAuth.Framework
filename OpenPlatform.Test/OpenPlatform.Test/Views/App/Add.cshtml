@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "Add";
+}
+
+<h2>Add</h2>
+
+<form method="post">
+    <table>
+        <tr>
+            <td>名称：</td>
+            <td><input class="form-control" name="AppName" /></td>
+        </tr>
+        <tr>
+            <td>说明：</td>
+            <td><input class="form-control" name="Description" /></td>
+        </tr>
+    </table>
+    @Html.AntiForgeryToken()
+    <button type="submit">提交</button>
+</form>

@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "Register";
+}
+
+<h2>Register</h2>
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<form method="post">
+    @Html.ValidationSummary();
+    <table>
+        <tr>
+            <td>用户名：</td>
+            <td><input name="UserName" /></td>
+        </tr>
+        <tr>
+            <td>密  码：</td>
+            <td><input name="Password" /></td>
+        </tr>
+        <tr>
+            <td>密  码：</td>
+            <td>
+                <button id="register-signin" type="submit" value="Register">Register</button>
+            </td>
+        </tr>
+    </table>
+    <input name="Code" value="1234" />
+    <input name="IdentityType" value="@IdentityTypes.UserName" />
+    @Html.AntiForgeryToken()
+</form>

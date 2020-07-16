@@ -1,0 +1,93 @@
+﻿
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+<br />
+<br />
+<div id="AppDetail">
+    <div class="panel panel-default">
+        <div class="panel-body">{{details.AppId}}</div>
+        <div class="panel-body"><span style="display: inline-block;min-width:10em;padding-right:15px;">{{details.Secret}}</span><button type="button" class="btn btn-default" id="reset_secret">重置</button><button class="btn btn-default">清除</button></div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body">{{details.Description}}</div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-body"><input class="form-control" v-model="details.RedirectUri" /></div>
+        <div class="panel-body"><button type="button" class="btn btn-default" id="modify_redirecturi">修改</button></div>
+    </div>
+    <div></div>
+</div>
+@section scripts{
+    <script>
+
+        var AppDetail = new Vue({
+            el: '#AppDetail',
+            data: {
+                details: {},
+                url: '/App/GetAppDetails/'
+            },
+            computed: {
+                isEmpty: function () {
+                    if (this.rows) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+            },
+            events: {
+                refresh: function (e) {
+                    this.rows = e;
+                }
+            }
+        });
+
+        $(function () {
+            $.ajax({
+                url: AppDetail.$data.url,
+                data: { appId:'@ViewBag.AppId' },
+                type: 'POST',
+                dataType: 'json',
+                success: function (result) {
+                    AppDetail.$data.details = result;
+                    //alert(JSON.stringify(result));
+                },
+                error: function (err) {
+                }
+            });
+
+            $('#reset_secret').on('click', function () {
+                $.ajax({
+                    url: '@Url.Content("/App/ResetSecret")',
+                    data: { appId:'@ViewBag.AppId' },
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (result) {
+                        AppDetail.$data.details = result;
+                        //alert(JSON.stringify(result));
+                    },
+                    error: function (err) {
+                    }
+                });
+            });
+
+            $("#modify_redirecturi").on('click', function () {
+                $.ajax({
+                    url: '@Url.Content("/App/ModifyRedirectUri")',
+                    data: { appId: '@ViewBag.AppId', url: AppDetail.$data.details.RedirectUri },
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (result) {
+                        AppDetail.$data.details.RedirectUri = result;
+                        //alert(JSON.stringify(result));
+                    },
+                    error: function (err) {
+                    }
+                });
+            });
+        });
+    </script>
+}

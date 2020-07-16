@@ -1,0 +1,127 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<script>
+    Date.prototype.toFormatString = function (format) {
+
+        if (!format)
+            return this.toString();
+
+        var o = {
+            'M+': this.getMonth() + 1, //月份
+            'd+': this.getDate(), //日
+            'h+': this.getHours() % 12 === 0 ? 12 : this.getHours() % 12, //小时
+            'H+': this.getHours(), //小时
+            'm+': this.getMinutes(), //分
+            's+': this.getSeconds(), //秒
+            'q+': Math.floor((this.getMonth() + 3) / 3), //季度
+            'S': this.getMilliseconds() //毫秒
+        };
+        var week = {
+            '0': '\u65e5',
+            '1': '\u4e00',
+            '2': '\u4e8c',
+            '3': '\u4e09',
+            '4': '\u56db',
+            '5': '\u4e94',
+            '6': '\u516d'
+        };
+        if (/(y+)/.test(format)) {
+            format = format.replace(RegExp.$1, (this.getFullYear() + '').substr(4 - RegExp.$1.length));
+        }
+        if (/(E+)/.test(format)) {
+            format = format.replace(RegExp.$1, ((RegExp.$1.length > 1) ? (RegExp.$1.length > 2 ? '\u661f\u671f' : '\u5468') : '') + week[this.getDay() + '']);
+        }
+        for (var k in o) {
+            if (new RegExp('(' + k + ')').test(format)) {
+                format = format.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)));
+            }
+        }
+        return format;
+    };
+</script>
+
+<br />
+<br />
+<div style="overflow-x:auto;">
+    <table class="table" id="dddddddddd">
+        <thead>
+            <tr>
+                <th v-for="col in columns" style="min-width:6em;">{{col}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-show="!isEmpty" v-for="item in rows">
+                <td>{{item.UserID}}</td>
+                <td>{{item.UserName}}</td>
+                <td>{{item.UserType}}</td>
+                <td>{{item.UserState}}</td>
+                <td style="min-width:16em;">{{item.CreateDate}}</td>
+                <td style="min-width:16em;">{{item.ModifiedDate}}</td>
+                <td>{{item.CheckCode}}</td>
+                <td>{{item.IsDeleted}}</td>
+            </tr>
+            <tr v-show="isEmpty" class="">
+                <td style="text-align:center;" v-bind:colspan="columns.length">没有匹配的记录</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<form action="/home/hhhh" method="post">
+
+    <button type="submit" class="btn btn-default">提交</button>
+</form>
+<br />
+<div>
+    @*<div>@("13278945634".RegexReplace(@"(?<=[\d]{3})\d(?=[\d]{3})"))</div>
+    <div>@("45262819981812001X".RegexReplace(@"(?<=[\d]{4})\d+(?=[\w]{3})", "****"))</div>
+    <div>@("6478913207715634452".RegexReplace(@"(?<=[\d]{3})\d+(?=[\d]{4})", "****"))</div>
+    <div>@("virtual13278945634@163.com".RegexReplace(@"(?<=.{3}).+(?=@.+)", "****"))</div>*@
+</div>
+
+@section scripts{
+    <script>
+
+        var vv = new Vue({
+            el: '#dddddddddd',
+            data: {
+                columns: ['ID', '登录帐号', '用户类型', '状态', '注册时间', '修改时间', 'KEY', '删除'],
+                allArticle: "",
+                rows: [],
+                pageModel: {
+                    url: '/Home/GetData',
+                    menu: [5, 10, 20, 50, 100, 200]
+                }
+            },
+            computed: {
+                isEmpty: function () {
+                    if (this.rows) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+            },
+            events: {
+                refresh: function (e) {
+                    this.rows = e;
+                }
+            }
+        });
+
+        $(function () {
+            $.ajax({
+                url: vv.$data.pageModel.url,
+                data: {},
+                type: 'POST',
+                dataType: 'json',
+                success: function (result) {
+                    vv.$data.rows = result;
+                    //alert(JSON.stringify(result));
+                },
+                error: function (err) {
+                }
+            });
+        });
+    </script>
+}

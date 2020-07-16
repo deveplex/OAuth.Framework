@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "Authorize";
+}
+
+<div style="height:200px;"></div>
+<div>
+    <p>登录用户：@ViewBag.IdentityName</p>
+    <p>第三方应用需要你给他开放以下权限</p>
+    <ul>
+        @foreach (var scope in ViewBag.scopes)
+        {
+            <li>@scope</li>
+        }
+    </ul>
+    <form method="post">
+        <button type="submit" name="IsGrant" value="true">同意</button>
+        <button type="submit" name="IsGrant" value="false">拒绝</button>
+        @Html.AntiForgeryToken()
+    </form>
+</div>

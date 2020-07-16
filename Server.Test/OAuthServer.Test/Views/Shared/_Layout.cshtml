@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+@{ViewBag.goBackUrl = "#";}
+<html class="mobile-first">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>@ViewBag.Title</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+    @*<link href="~/Content/bootstrap.xclusive.min.css" rel="stylesheet" />*@
+    @*<link href="~/Content/layout.css" rel="stylesheet" />*@
+    @*<script src="~/Scripts/Modernizr.js"></script>*@
+    @RenderSection("styles", required: false)
+</head>
+<body>
+    <header class="container navbar-fixed-top header-navbar">
+        <div class="panel-group vertical transparent">
+            <div class="panel-children">
+                <ul class="table">
+                    <li class="col-xs-0 vertical-middle">
+                        <a class="navbar-back" data-toggle="@(ViewBag.goBackUrl??"#")">
+                            <i class="navbar-image cysicons cysicon-chevron-left"></i><span class="navbar-text">返回</span>
+                        </a>
+                    </li>
+                    <li class="col-xs-12 vertical-middle horizontal-center">
+                        <div class="btn-group">
+                            <a class="transparent dropdown-toggle navbar-title" data-toggle="dropdown">
+                                <span class="title">
+                                    @ViewBag.Title
+                                </span>
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu"></ul>
+                        </div>
+                    </li>
+                    <li class="col-xs-0 vertical-middle padding-left">
+                        <div class="btn-group">
+                            <a class="transparent dropdown-toggle" data-toggle="dropdown">
+                                <i class="title cysicons cysicon-menu"></i>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">功能</a></li>
+                                <li><a href="#">另一个功能</a></li>
+                                <li><a href="#">其他</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">分离的链接</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+    <div class="loadingbox">
+        <div class="loadEffect">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <footer class="container navbar-fixed-bottom footer-navbar">
+        @*<div class="panel-group vertical transparent">
+                <div class="panel-children">
+                    <button class="btn btn-primary login-button-ff" data-loading-text="登录">登录</button>
+                </div>
+            </div>*@
+    </footer>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    @*<script src="~/Scripts/bootstrap.xclusive.min.js"></script>*@
+    @*<script src="~/Scripts/respond.min.js"></script>*@
+    <script src="https://cdn.bootcss.com/vue/2.5.16/vue.min.js"></script>
+    @*<script src="~/Scripts/layout.js"></script>*@
+    @RenderSection("scripts", required: false)
+</body>
+</html>
